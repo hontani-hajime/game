@@ -4,46 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>開発中</title>
-    
-    <!-- ホーム画面に追加した時のアイコン設定 -->
+
+    <!-- アイコン設定 -->
     <link rel="apple-touch-icon" href="https://hontani-hajime.github.io/game/IMG_0699.jpeg">
+    <link rel="manifest" href="manifest.json">
     
-    <!-- フルスクリーンで表示する設定 -->
+    <!-- フルスクリーン表示設定 -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="開発中">
-    
+    <meta name="apple-mobile-web-app-title" content="電車運転シミュレーター">
+
     <style>
-        /* スタイリング（必要に応じて変更してください） */
+        /* 全体のリセットと背景設定 */
         body, html {
             margin: 0;
             padding: 0;
             overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #1c1c1c;
-            color: #fff;
             font-family: Arial, sans-serif;
+            background: url('https://hontani-hajime.github.io/game/scenery.jpg') center center / cover no-repeat;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            height: 100vh;
+            color: #fff;
+            background-attachment: fixed;
         }
-        
-        .container {
-            text-align: center;
-        }
-        
+
+        /* シミュレーターのUI */
         .simulator {
             width: 100%;
             max-width: 800px;
-            background-color: #333;
+            background-color: rgba(0, 0, 0, 0.7);
             padding: 20px;
             border-radius: 10px;
+            text-align: center;
         }
         
+        .speed-display {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        /* ボタンデザイン */
         .controls {
             display: flex;
             justify-content: space-around;
-            margin-top: 20px;
         }
         
         .control-button {
@@ -56,32 +62,53 @@
             border-radius: 50%;
             cursor: pointer;
         }
-        
+
         .control-button:active {
             background-color: #666;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>電車運転シミュレーター</h1>
-        <div class="simulator">
-            <p>シミュレーション開始！</p>
-            <div class="controls">
-                <button class="control-button">前進</button>
-                <button class="control-button">停止</button>
-                <button class="control-button">後退</button>
-            </div>
+    <div class="simulator">
+        <div class="speed-display" id="speedDisplay">速度: 0 km/h</div>
+        <div class="controls">
+            <button class="control-button" onclick="accelerate()">加速</button>
+            <button class="control-button" onclick="brake()">ブレーキ</button>
+            <button class="control-button" onclick="stop()">停止</button>
         </div>
     </div>
     
     <script>
-        // 基本的な操作ロジック（必要に応じて機能追加可能）
-        document.querySelectorAll('.control-button').forEach(button => {
-            button.addEventListener('click', () => {
-                alert(button.textContent + " ボタンが押されました");
-            });
-        });
+        // 速度管理用の変数
+        let speed = 0;
+        const speedDisplay = document.getElementById("speedDisplay");
+
+        // 加速ボタンの機能
+        function accelerate() {
+            if (speed < 120) {  // 最高速度を120 km/hに制限
+                speed += 10;
+                updateSpeedDisplay();
+            }
+        }
+
+        // ブレーキボタンの機能
+        function brake() {
+            if (speed > 0) {
+                speed -= 10;
+                updateSpeedDisplay();
+            }
+        }
+
+        // 停止ボタンの機能
+        function stop() {
+            speed = 0;
+            updateSpeedDisplay();
+        }
+
+        // 速度表示を更新
+        function updateSpeedDisplay() {
+            speedDisplay.textContent = `速度: ${speed} km/h`;
+        }
     </script>
 </body>
 </html>
